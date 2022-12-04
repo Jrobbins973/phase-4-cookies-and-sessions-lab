@@ -1,12 +1,17 @@
 class ArticlesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
+  # session[:page_views] ||= 3
+
+
   def index
+    session[:page_views] ||= 0
     articles = Article.all.includes(:user).order(created_at: :desc)
     render json: articles, each_serializer: ArticleListSerializer
   end
 
   def show
+    
     article = Article.find(params[:id])
     render json: article
   end
